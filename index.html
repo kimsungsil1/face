@@ -6,10 +6,10 @@
     <title>피부 나이 측정기</title>
     <style>
         body {
-            font-family: 'Noto Serif', serif;
+            font-family: 'Nanum Gothic', sans-serif;
             text-align: center;
-            background-color: #faf5f0;
-            color: #444;
+            background-color: #f3e5f5;
+            color: #5e4780;
             margin: 0;
             padding: 0;
             display: flex;
@@ -23,27 +23,27 @@
         h1 {
             font-weight: 700;
             font-size: 2.5rem;
-            color: #3e2723;
+            color: #5e4780;
             margin-bottom: 15px;
         }
         p {
             font-size: 1.2rem;
             margin-bottom: 25px;
             padding: 0 20px;
-            color: #5d4037;
+            color: #7c5295;
         }
         input[type="file"] {
             font-size: 1rem;
             margin-bottom: 20px;
             width: 80%;
             max-width: 300px;
-            border: 2px solid #d7ccc8;
+            border: 2px solid #c5a3dc;
             border-radius: 8px;
             padding: 10px;
             background-color: #fff;
         }
         button {
-            background-color: #8d6e63;
+            background-color: #9575cd;
             color: white;
             border: none;
             padding: 12px 30px;
@@ -54,19 +54,19 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         button:hover {
-            background-color: #5d4037;
+            background-color: #7c5295;
         }
         #result {
             font-size: 1.4rem;
             margin-top: 30px;
             font-weight: 500;
             padding: 0 20px;
-            color: #6d4c41;
+            color: #5e4780;
         }
         #loading {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #8d6e63;
+            color: #9575cd;
             margin-top: 20px;
         }
         #uploadedImage {
@@ -78,16 +78,19 @@
             position: relative;
         }
         #laserLine {
-            height: calc(100% - 4px);
+            height: 100%;
             width: 2px;
-            background-color: rgba(255, 0, 0, 0.8);
+            background-color: rgba(142, 36, 170, 0.8);
             position: absolute;
-            top: 2px;
+            top: 0;
             left: 0;
             animation: scanVertical 4s ease-in-out;
         }
         @keyframes scanVertical {
             0% { left: 0; }
+            50% { left: calc(100% - 2px); }
+            100% { left: 0; }
+        }
             50% { left: calc(100% - 2px); }
             100% { left: 0; }
         }
@@ -124,6 +127,7 @@
                     const laserLine = document.createElement('div');
                     laserLine.id = 'laserLine';
                     laserLine.style.height = `${uploadedImage.clientHeight}px`;
+                    laserLine.style.width = `${uploadedImage.clientWidth}px`;
                     uploadedImage.parentElement.insertBefore(laserLine, uploadedImage.nextSibling);
 
                     loadingDiv.innerHTML = '분석 장비 가동 중...';
