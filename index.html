@@ -69,10 +69,11 @@
             position: relative;
         }
         #laserLine {
-            width: 100%;
+            width: calc(100% - 4px);
             height: 2px;
             background-color: red;
             position: absolute;
+            left: 2px;
             top: 0;
             animation: scan 4s ease-in-out;
         }
@@ -113,6 +114,7 @@
                 uploadedImage.onload = function() {
                     const laserLine = document.createElement('div');
                     laserLine.id = 'laserLine';
+                    laserLine.style.width = `${uploadedImage.clientWidth}px`;
                     uploadedImage.parentElement.insertBefore(laserLine, uploadedImage.nextSibling);
 
                     loadingDiv.innerHTML = '분석 장비 가동 중...';
