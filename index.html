@@ -69,16 +69,19 @@
             position: relative;
         }
         #laserLine {
-            width: calc(100% - 4px);
-            height: 2px;
+            height: calc(100% - 4px);
+            width: 2px;
             background-color: red;
             position: absolute;
-            left: 2px;
-            top: 0;
-            animation: scan 4s ease-in-out;
+            top: 2px;
+            left: 0;
+            animation: scanVertical 4s ease-in-out;
         }
-        @keyframes scan {
-            0% { top: 0; }
+        @keyframes scanVertical {
+            0% { left: 0; }
+            50% { left: calc(100% - 2px); }
+            100% { left: 0; }
+        }
             50% { top: calc(100% - 2px); }
             100% { top: 0; }
         }
