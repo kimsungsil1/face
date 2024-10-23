@@ -105,8 +105,9 @@
 </head>
 <body>
     <h1>피부 나이 측정기</h1>
-    <p>셀카를 업로드하여 피부 나이를 확인해보세요!</p>
-    <input type="file" id="imageUpload" accept="image/*">
+    <p>셀카를 업로드하거나 바로 찍어서 피부 나이를 확인해보세요!</p>
+    <!-- 'capture' 속성 추가 -->
+    <input type="file" id="imageUpload" accept="image/*" capture>
     <!-- 버튼 이름을 '측정시작'으로 변경 -->
     <button onclick="analyzeSkin()">측정시작</button>
 
