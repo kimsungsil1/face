@@ -74,7 +74,6 @@
             position: relative;
             display: none; /* 초기에는 보이지 않도록 */
             max-width: 80%;
-            max-height: 300px;
             margin-top: 20px;
         }
         #uploadedImage {
@@ -82,6 +81,7 @@
             height: auto;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: block;
         }
         #laserLine {
             width: 1px; /* 레이저선을 아주 얇게 */
@@ -91,6 +91,7 @@
             top: 0;
             left: 0;
             animation: scanVertical 4s ease-in-out;
+            animation-fill-mode: forwards;
             z-index: 2;
             pointer-events: none;
         }
@@ -133,11 +134,30 @@
 
             reader.onload = function (e) {
                 uploadedImage.src = e.target.result;
-                imageContainer.style.display = 'block'; // 이미지 컨테이너 표시
+                imageContainer.style.display = 'block';
+
                 uploadedImage.onload = function() {
+                    // 기존의 레이저선이 있으면 제거
+                    const existingLaserLine = document.getElementById('laserLine');
+                    if (existingLaserLine) {
+                        existingLaserLine.remove();
+                    }
+
                     const laserLine = document.createElement('div');
                     laserLine.id = 'laserLine';
-                    imageContainer.appendChild(laserLine); // 레이저선을 이미지 컨테이너에 추가
+
+                    // 이미지의 실제 크기를 가져와 레이저선 조정
+                    const imgWidth = uploadedImage.clientWidth;
+                    const imgHeight = uploadedImage.clientHeight;
+
+                    laserLine.style.height = imgHeight + 'px';
+                    laserLine.style.top = '0px';
+                    laserLine.style.left = '0px';
+
+                    imageContainer.style.width = imgWidth + 'px';
+                    imageContainer.style.height = imgHeight + 'px';
+
+                    imageContainer.appendChild(laserLine);
 
                     loadingDiv.innerHTML = '분석 장비 가동 중...';
                     resultDiv.innerHTML = '';
