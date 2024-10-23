@@ -56,6 +56,12 @@
             font-weight: 500;
             padding: 0 20px;
         }
+        #loading {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007aff;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -63,6 +69,7 @@
     <p>셀카를 업로드하여 피부 나이를 확인해보세요!</p>
     <input type="file" id="imageUpload" accept="image/*">
     <button onclick="analyzeSkin()">Analyze</button>
+    <div id="loading"></div>
     <div id="result"></div>
 
     <script>
@@ -73,18 +80,29 @@
                 return;
             }
 
+            const loadingDiv = document.getElementById('loading');
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '분석 중...';
+            loadingDiv.innerHTML = '분석 장비 가동 중...';
+            resultDiv.innerHTML = '';
 
             setTimeout(() => {
-                // 임의의 나이를 생성하여 결과 표시
-                const randomAge = Math.floor(Math.random() * 30) + 20;
-                resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>지금 바로 관리를 받으세요!`;
+                loadingDiv.innerHTML = '피부 스캔 중...';
 
-                // 3초 후에 링크로 이동
                 setTimeout(() => {
-                    window.location.href = 'https://naver.me/Fk5jWpff';
-                }, 3000);
+                    loadingDiv.innerHTML = '데이터 분석 중...';
+
+                    setTimeout(() => {
+                        // 임의의 나이를 생성하여 결과 표시
+                        const randomAge = Math.floor(Math.random() * 30) + 20;
+                        loadingDiv.innerHTML = '';
+                        resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>지금 바로 관리를 받으세요!`;
+
+                        // 3초 후에 링크로 이동
+                        setTimeout(() => {
+                            window.location.href = 'https://naver.me/Fk5jWpff';
+                        }, 3000);
+                    }, 2000);
+                }, 2000);
             }, 2000);
         }
     </script>
