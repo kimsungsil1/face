@@ -15,7 +15,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* 변경: 상단 정렬 */
+            justify-content: flex-start; /* 상단 정렬 */
             min-height: 100vh;
             box-sizing: border-box;
             transition: all 0.3s ease-in-out;
@@ -53,13 +53,14 @@
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px; /* 버튼 아래 여백 추가 */
         }
         button:hover {
             background-color: #7c5295;
         }
         #result {
             font-size: 1.4rem;
-            margin-top: 30px;
+            margin-top: 20px;
             font-weight: 500;
             padding: 0 20px;
             color: #5e4780;
@@ -72,7 +73,7 @@
         }
         #imageContainer {
             position: relative;
-            display: none; /* 초기에는 보이지 않도록 */
+            display: none;
             max-width: 80%;
             margin-top: 20px;
         }
@@ -107,15 +108,16 @@
     <p>셀카를 업로드하여 피부 나이를 확인해보세요!</p>
     <input type="file" id="imageUpload" accept="image/*">
     <button onclick="analyzeSkin()">Analyze</button>
-    
-    <!-- 이미지를 맨 위로 이동 -->
+
+    <!-- 분석 중 메시지와 결과를 이미지 위로 이동 -->
+    <div id="loading"></div>
+    <div id="result"></div>
+
+    <!-- 이미지 컨테이너 -->
     <div id="imageContainer">
         <img id="uploadedImage" />
     </div>
     
-    <div id="loading"></div>
-    <div id="result"></div>
-
     <script>
         function analyzeSkin() {
             const imageInput = document.getElementById('imageUpload');
