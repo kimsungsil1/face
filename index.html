@@ -86,9 +86,13 @@
             left: 0;
             animation: scanVertical 4s ease-in-out;
             z-index: 2;
+            pointer-events: none;
         }
         @keyframes scanVertical {
-            0% { left: 0; }
+            0% { left: 2px; }
+            50% { left: calc(100% - 4px); }
+            100% { left: 2px; }
+        }
             50% { left: calc(100% - 1px); }
             100% { left: 0; }
         }
@@ -130,7 +134,7 @@
                 uploadedImage.onload = function() {
                     const laserLine = document.createElement('div');
                     laserLine.id = 'laserLine';
-                    laserLine.style.height = `${uploadedImage.clientHeight}px`;
+                    laserLine.style.height = `${uploadedImage.clientHeight - 4}px`;
                     laserLine.style.width = `${uploadedImage.clientWidth}px`;
                     uploadedImage.parentElement.insertBefore(laserLine, uploadedImage.nextSibling);
 
