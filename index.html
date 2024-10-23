@@ -95,7 +95,13 @@
                         // 임의의 나이를 생성하여 결과 표시
                         const randomAge = Math.floor(Math.random() * 30) + 20;
                         loadingDiv.innerHTML = '';
-                        resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>지금 바로 관리를 받으세요!`;
+                        if (randomAge >= 20 && randomAge <= 28) {
+                            resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>피부가 건강하시네요!`;
+                        } else if (randomAge >= 29 && randomAge <= 40) {
+                            resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>피부 관리 좀 받으셔야겠어요. 노력이 필요해 보입니다.`;
+                        } else {
+                            resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>지금 바로 예약하세요!`;
+                        }
 
                         // 3초 후에 링크로 이동
                         setTimeout(() => {
