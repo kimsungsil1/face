@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -15,7 +15,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* 변경: 상단 정렬 */
             min-height: 100vh;
             box-sizing: border-box;
             transition: all 0.3s ease-in-out;
@@ -24,6 +24,7 @@
             font-weight: 700;
             font-size: 2.5rem;
             color: #5e4780;
+            margin-top: 30px; /* 상단 여백 추가 */
             margin-bottom: 15px;
         }
         p {
@@ -69,37 +70,33 @@
             color: #9575cd;
             margin-top: 20px;
         }
-        #uploadedImage {
+        #imageContainer {
+            position: relative;
+            display: none; /* 초기에는 보이지 않도록 */
             max-width: 80%;
             max-height: 300px;
             margin-top: 20px;
+        }
+        #uploadedImage {
+            width: 100%;
+            height: auto;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
         }
         #laserLine {
-            height: calc(100% - 4px);
-            width: 1px;
+            width: 1px; /* 레이저선을 아주 얇게 */
+            height: 100%;
             background-color: red;
             position: absolute;
-            top: 2px;
+            top: 0;
             left: 0;
             animation: scanVertical 4s ease-in-out;
             z-index: 2;
             pointer-events: none;
         }
         @keyframes scanVertical {
-            0% { left: 2px; }
-            50% { left: calc(100% - 4px); }
-            100% { left: 2px; }
-        }
+            0% { left: 0; }
             50% { left: calc(100% - 1px); }
-            100% { left: 0; }
-        }
-            50% { left: calc(100% - 2px); }
-            100% { left: 0; }
-        }
-            50% { left: calc(100% - 2px); }
             100% { left: 0; }
         }
     </style>
@@ -109,8 +106,13 @@
     <p>셀카를 업로드하여 피부 나이를 확인해보세요!</p>
     <input type="file" id="imageUpload" accept="image/*">
     <button onclick="analyzeSkin()">Analyze</button>
+    
+    <!-- 이미지를 맨 위로 이동 -->
+    <div id="imageContainer">
+        <img id="uploadedImage" />
+    </div>
+    
     <div id="loading"></div>
-    <img id="uploadedImage" style="display:none;" />
     <div id="result"></div>
 
     <script>
@@ -119,6 +121,7 @@
             const uploadedImage = document.getElementById('uploadedImage');
             const loadingDiv = document.getElementById('loading');
             const resultDiv = document.getElementById('result');
+            const imageContainer = document.getElementById('imageContainer');
 
             if (imageInput.files.length === 0) {
                 alert('먼저 이미지를 업로드해주세요.');
@@ -130,13 +133,11 @@
 
             reader.onload = function (e) {
                 uploadedImage.src = e.target.result;
-                uploadedImage.style.display = 'block';
+                imageContainer.style.display = 'block'; // 이미지 컨테이너 표시
                 uploadedImage.onload = function() {
                     const laserLine = document.createElement('div');
                     laserLine.id = 'laserLine';
-                    laserLine.style.height = `${uploadedImage.clientHeight - 4}px`;
-                    laserLine.style.width = `${uploadedImage.clientWidth}px`;
-                    uploadedImage.parentElement.insertBefore(laserLine, uploadedImage.nextSibling);
+                    imageContainer.appendChild(laserLine); // 레이저선을 이미지 컨테이너에 추가
 
                     loadingDiv.innerHTML = '분석 장비 가동 중...';
                     resultDiv.innerHTML = '';
