@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>피부 나이 측정기</title>
-    <!-- 아이콘 사용을 위해 Font Awesome CDN 추가 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-eO+9W+8xHpG2p1FopDQD1Nf0z+KF8l/+UKhtSHr/hPZ2q5RfQ7y2TT6fLXUeN1+X" crossorigin="anonymous">
     <style>
         body {
             font-family: 'Nanum Gothic', sans-serif;
@@ -44,21 +42,6 @@
             border-radius: 8px;
             padding: 10px;
             background-color: #fff;
-        }
-        #cameraButton {
-            background-color: #9575cd;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: background-color 0.3s ease-in-out;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        #cameraButton:hover {
-            background-color: #7c5295;
         }
         button {
             background-color: #9575cd;
@@ -123,15 +106,11 @@
 <body>
     <h1>피부 나이 측정기</h1>
     <p>셀카를 업로드하여 피부 나이를 확인해보세요!</p>
-
-    <!-- 파일 선택 버튼 -->
     <input type="file" id="imageUpload" accept="image/*">
-    <!-- 카메라 촬영 버튼 -->
-    <button id="cameraButton"><i class="fas fa-camera"></i></button>
-    <!-- 측정 시작 버튼 -->
+    <!-- 버튼 이름을 '측정시작'으로 변경 -->
     <button onclick="analyzeSkin()">측정시작</button>
 
-    <!-- 분석 중 메시지와 결과 -->
+    <!-- 분석 중 메시지와 결과를 이미지 위로 이동 -->
     <div id="loading"></div>
     <div id="result"></div>
 
@@ -139,97 +118,82 @@
     <div id="imageContainer">
         <img id="uploadedImage" />
     </div>
-
-    <!-- 숨겨진 카메라 입력 요소 -->
-    <input type="file" id="cameraInput" accept="image/*" capture style="display:none;">
-
+    
     <script>
-        // 카메라 버튼 클릭 시 카메라 입력 요소 클릭
-        document.getElementById('cameraButton').addEventListener('click', function() {
-            document.getElementById('cameraInput').click();
-        });
-
-        // 카메라 입력 또는 파일 선택 시 처리
-        document.getElementById('cameraInput').addEventListener('change', handleImageUpload);
-        document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const uploadedImage = document.getElementById('uploadedImage');
-                    const imageContainer = document.getElementById('imageContainer');
-                    uploadedImage.src = e.target.result;
-                    imageContainer.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
         function analyzeSkin() {
+            const imageInput = document.getElementById('imageUpload');
             const uploadedImage = document.getElementById('uploadedImage');
             const loadingDiv = document.getElementById('loading');
             const resultDiv = document.getElementById('result');
             const imageContainer = document.getElementById('imageContainer');
 
-            if (!uploadedImage.src) {
+            if (imageInput.files.length === 0) {
                 alert('먼저 이미지를 업로드해주세요.');
                 return;
             }
 
-            uploadedImage.onload = function() {
-                // 기존의 레이저선이 있으면 제거
-                const existingLaserLine = document.getElementById('laserLine');
-                if (existingLaserLine) {
-                    existingLaserLine.remove();
-                }
+            const file = imageInput.files[0];
+            const reader = new FileReader();
 
-                const laserLine = document.createElement('div');
-                laserLine.id = 'laserLine';
+            reader.onload = function (e) {
+                uploadedImage.src = e.target.result;
+                imageContainer.style.display = 'block';
 
-                // 이미지의 실제 크기를 가져와 레이저선 조정
-                const imgWidth = uploadedImage.clientWidth;
-                const imgHeight = uploadedImage.clientHeight;
+                uploadedImage.onload = function() {
+                    // 기존의 레이저선이 있으면 제거
+                    const existingLaserLine = document.getElementById('laserLine');
+                    if (existingLaserLine) {
+                        existingLaserLine.remove();
+                    }
 
-                laserLine.style.height = imgHeight + 'px';
-                laserLine.style.top = '0px';
-                laserLine.style.left = '0px';
+                    const laserLine = document.createElement('div');
+                    laserLine.id = 'laserLine';
 
-                imageContainer.style.width = imgWidth + 'px';
-                imageContainer.style.height = imgHeight + 'px';
+                    // 이미지의 실제 크기를 가져와 레이저선 조정
+                    const imgWidth = uploadedImage.clientWidth;
+                    const imgHeight = uploadedImage.clientHeight;
 
-                imageContainer.appendChild(laserLine);
-            };
+                    laserLine.style.height = imgHeight + 'px';
+                    laserLine.style.top = '0px';
+                    laserLine.style.left = '0px';
 
-            loadingDiv.innerHTML = '분석 장비 가동 중...';
-            resultDiv.innerHTML = '';
+                    imageContainer.style.width = imgWidth + 'px';
+                    imageContainer.style.height = imgHeight + 'px';
 
-            setTimeout(() => {
-                loadingDiv.innerHTML = '피부 스캔 중...';
+                    imageContainer.appendChild(laserLine);
 
-                setTimeout(() => {
-                    loadingDiv.innerHTML = '데이터 분석 중...';
+                    loadingDiv.innerHTML = '분석 장비 가동 중...';
+                    resultDiv.innerHTML = '';
 
                     setTimeout(() => {
-                        // 임의의 나이를 생성하여 결과 표시
-                        const randomAge = Math.floor(Math.random() * 30) + 20;
-                        loadingDiv.innerHTML = '';
-                        if (randomAge >= 20 && randomAge <= 28) {
-                            resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>피부가 건강하시네요! 지금부터 계속 관리하여 피부를 유지하세요!`;
-                        } else if (randomAge >= 29 && randomAge <= 40) {
-                            resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>피부 관리 좀 받으셔야겠어요. 노력이 필요해 보입니다.`;
-                        } else {
-                            resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>지금 바로 예약하세요!`;
-                        }
+                        loadingDiv.innerHTML = '피부 스캔 중...';
 
-                        // 3초 후에 링크로 이동
                         setTimeout(() => {
-                            window.location.href = 'https://naver.me/Fk5jWpff';
-                        }, 3000);
+                            loadingDiv.innerHTML = '데이터 분석 중...';
+
+                            setTimeout(() => {
+                                // 임의의 나이를 생성하여 결과 표시
+                                const randomAge = Math.floor(Math.random() * 30) + 20;
+                                loadingDiv.innerHTML = '';
+                                if (randomAge >= 20 && randomAge <= 28) {
+                                    resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>피부가 건강하시네요! 지금부터 계속 관리하여 피부를 유지하세요!`;
+                                } else if (randomAge >= 29 && randomAge <= 40) {
+                                    resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>피부 관리 좀 받으셔야겠어요. 노력이 필요해 보입니다.`;
+                                } else {
+                                    resultDiv.innerHTML = `예상 피부 나이: ${randomAge}세<br>지금 바로 예약하세요!`;
+                                }
+
+                                // 3초 후에 링크로 이동
+                                setTimeout(() => {
+                                    window.location.href = 'https://naver.me/Fk5jWpff';
+                                }, 3000);
+                            }, 2000);
+                        }, 2000);
                     }, 2000);
-                }, 2000);
-            }, 2000);
+                };
+            };
+
+            reader.readAsDataURL(file);
         }
     </script>
 </body>
