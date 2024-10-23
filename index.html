@@ -78,16 +78,20 @@
             position: relative;
         }
         #laserLine {
-            height: 100%;
-            width: 2px;
-            background-color: rgba(142, 36, 170, 0.8);
+            height: calc(100% - 4px);
+            width: 1px;
+            background-color: red;
             position: absolute;
-            top: 0;
+            top: 2px;
             left: 0;
             animation: scanVertical 4s ease-in-out;
+            z-index: 2;
         }
         @keyframes scanVertical {
             0% { left: 0; }
+            50% { left: calc(100% - 1px); }
+            100% { left: 0; }
+        }
             50% { left: calc(100% - 2px); }
             100% { left: 0; }
         }
